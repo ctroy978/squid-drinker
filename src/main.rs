@@ -9,6 +9,8 @@ use diesel::r2d2::{self, ConnectionManager};
 pub type DbPool = r2d2::Pool<ConnectionManager<PgConnection>>;
 
 mod handlers;
+mod schema;
+mod models;
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()>{

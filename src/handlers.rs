@@ -15,26 +15,24 @@ pub struct FullRecipe{
 }
 
 
-
-
 type DbError = Box<dyn std::error::Error + Send + Sync>;
 
-#[get("/drink/{title}")]
-async fn show(pool: web::Data<DbPool>, title: web::Path<String>) -> Result<HttpResponse, Error>{
+#[get("/drink/{search_for}")]
+async fn show(pool: web::Data<DbPool>, search_for: web::Path<String>) -> Result<HttpResponse, Error>{
 
     let the_recipe = web::block(move ||{
         let conn = pool.get()?;
-        find_recipe(&conn, &title)
+        find_recipe(&conn, &search_for)
     }).await?
     .map_err(actix_web::error::ErrorInternalServerError)?;
     Ok(HttpResponse::Ok().json(the_recipe))
 }
 
-fn find_recipe(conn: &PgConnection, title: &str) -> Result<FullRecipe, DbError>{
+fn find_recipe(conn: &PgConnection, search_for: &str) -> Result<FullRecipe, DbError>{
     use crate::schema::recipes::dsl::*;
    
 
-    let the_recipe = recipes.filter(title.eq(title))
+    let the_recipe = recipes.filter(title.eq(search_for))
         .first::<Recipe>(conn)?;
  
     let the_ingredients = Ingredient::belonging_to(&the_recipe)

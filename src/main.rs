@@ -14,6 +14,7 @@ mod handlers;
 mod schema;
 mod models;
 
+
 #[actix_web::main]
 async fn main() -> std::io::Result<()>{
 
@@ -47,6 +48,7 @@ async fn main() -> std::io::Result<()>{
             .wrap(cors)
             .service(handlers::show)
             .service(handlers::build)
+            
     })
         //.bind(("127.0.0.1", 8080))?
         .bind(("192.168.1.113", 8080))?

@@ -15,6 +15,7 @@ const MAX_SIZE: usize = 262_144; // max payload size is 256k
 pub struct FullRecipe{
     title: String,
     rank: i32,
+    booz: String,
     directions: String,
     ingredients: Vec<String>,
 }
@@ -33,6 +34,11 @@ async fn show(pool: web::Data<DbPool>, search_for: web::Path<String>) -> Result<
     Ok(HttpResponse::Ok().json(the_recipe))
 }
 
+
+
+
+
+
 #[derive(Deserialize)]
 struct Ing{
     label: String,
@@ -44,6 +50,7 @@ struct Ing{
 struct Info{
     title: String,
     rank: String,
+    booz: String,
     directions: String,
     add_ingredient: Vec<Ing>,
 
@@ -93,6 +100,7 @@ fn find_recipe(conn: &PgConnection, search_for: &str) -> Result<FullRecipe, DbEr
         let full_recipe = FullRecipe{
             title: the_recipe.title.to_owned(),
             rank: the_recipe.rank,
+            booz: the_recipe.booz,
             directions: the_recipe.directions.to_owned(),
             ingredients: list_ingredients,
         };
@@ -112,6 +120,7 @@ fn post_recipe(conn: &PgConnection, info: web::Json<Info>)->Result<Recipe, DbErr
     let new_recipe = NewRecipe {
         title: &info.title.as_str(),
         rank: &info.rank.parse::<i32>().unwrap(),
+        booz: &info.booz.as_str(),
         directions: &info.directions.as_str(),
     };
 
@@ -164,6 +173,4 @@ fn post_recipe(conn: &PgConnection, info: web::Json<Info>)->Result<Recipe, DbErr
 
     };
     Ok(this_recipe)
-
-
 }

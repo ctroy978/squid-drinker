@@ -26,6 +26,7 @@ table! {
         id -> Int4,
         title -> Varchar,
         rank -> Int4,
+        booz -> Varchar,
         directions -> Varchar,
     }
 }

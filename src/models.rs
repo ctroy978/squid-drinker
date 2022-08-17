@@ -7,6 +7,7 @@ pub struct Recipe{
     pub id: i32,
     pub title: String,
     pub rank: i32,
+    pub booz: String,
     pub directions: String,
 }
 
@@ -15,6 +16,7 @@ pub struct Recipe{
 pub struct NewRecipe<'a>{
     pub title: &'a str,
     pub rank: &'a i32,
+    pub booz: &'a str,
     pub directions: &'a str,
 }
 

@@ -13,6 +13,7 @@ pub type DbPool = r2d2::Pool<ConnectionManager<PgConnection>>;
 mod handlers;
 mod schema;
 mod models;
+mod libs;
 
 
 #[actix_web::main]
@@ -48,6 +49,7 @@ async fn main() -> std::io::Result<()>{
             .wrap(cors)
             .service(handlers::show)
             .service(handlers::build)
+            .service(handlers::srch)
             
     })
         //.bind(("127.0.0.1", 8080))?

@@ -6,6 +6,7 @@ use actix_web::{get, post, web, HttpResponse, Result, Error, Responder};
 use diesel::prelude::*;
 
 use crate::models::{Recipe, NewRecipe, Ingredient, NewIngredient, Unit, NewUnit, Label, NewLabel, Qty, NewQty};
+use crate::libs::{find_booz};
 
 
 const MAX_SIZE: usize = 262_144; // max payload size is 256k
@@ -34,7 +35,16 @@ async fn show(pool: web::Data<DbPool>, search_for: web::Path<String>) -> Result<
     Ok(HttpResponse::Ok().json(the_recipe))
 }
 
+#[get("/search/{search_for}")]
+async fn srch(pool: web::Data<DbPool>, search_for: web::Path<String>) -> Result<HttpResponse, Error>{
 
+    let drink_list = web::block(move ||{
+        let conn = pool.get()?;
+        find_booz(&conn, &search_for)
+    }).await?
+    .map_err(actix_web::error::ErrorInternalServerError)?;
+    Ok(HttpResponse::Ok().json(drink_list))
+}
 
 
 

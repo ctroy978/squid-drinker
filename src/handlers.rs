@@ -2,14 +2,11 @@ use super::DbPool;
 
 
 use serde::{Deserialize, Serialize};
-use actix_web::{get, post, web, HttpResponse, Result, Error, Responder};
+use actix_web::{get, post, web, HttpResponse, Result, Error};
 use diesel::prelude::*;
 
 use crate::models::{Recipe, NewRecipe, Ingredient, NewIngredient, Unit, NewUnit, Label, NewLabel, Qty, NewQty};
 use crate::libs::{find_booz};
-
-
-const MAX_SIZE: usize = 262_144; // max payload size is 256k
 
 
 #[derive(Debug, Serialize, Deserialize)]
@@ -50,14 +47,14 @@ async fn srch(pool: web::Data<DbPool>, search_for: web::Path<String>) -> Result<
 
 
 #[derive(Deserialize)]
-struct Ing{
+pub struct Ing{
     label: String,
     unit: String,
     qty: String,
 }
 
 #[derive(Deserialize)]
-struct Info{
+pub struct Info{
     title: String,
     rank: String,
     booz: String,

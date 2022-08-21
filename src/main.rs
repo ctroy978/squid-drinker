@@ -6,6 +6,7 @@ use actix_web::{middleware::Logger, web, App, HttpServer, HttpRequest, Result};
 use diesel::prelude::*;
 use diesel::r2d2::{self, ConnectionManager};
 use env_logger::Env;
+use actix_cors::Cors;
 
 use actix_web_static_files::{self, ResourceFiles};
 
@@ -39,11 +40,14 @@ async fn main() -> std::io::Result<()>{
 
     HttpServer::new(move ||{
 
+        let cors = Cors::permissive();
+
         let generated = generate();
             
         App::new()
             .wrap(Logger::default())
             .wrap(Logger::new("%a %{User-Agent}i"))
+            .wrap(cors)
             .app_data(web::Data::new(pool.clone()))
             .service(handlers::show)
             .service(handlers::build)
@@ -52,7 +56,7 @@ async fn main() -> std::io::Result<()>{
             
     })
         //.bind(("127.0.0.1", 8080))?
-        .bind(("192.168.1.6", 8080))?
+        .bind(("192.168.1.", 8080))?
         .run()
         .await
 }

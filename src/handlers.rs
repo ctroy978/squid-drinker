@@ -63,8 +63,10 @@ pub struct Info{
 
 }
 
+
+
 #[post("/build")]
-pub async fn build(pool: web::Data<DbPool>,info: web::Json<Info>)-> Result<HttpResponse, Error>{
+async fn build(pool: web::Data<DbPool>,info: web::Json<Info>)-> Result<HttpResponse, Error>{
 
     
     let the_recipe = web::block(move ||{

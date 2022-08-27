@@ -1,9 +1,11 @@
 use super::DbPool;
 
 
+use diesel::dsl::exists;
 use serde::{Deserialize, Serialize};
-use actix_web::{get, post, web, HttpResponse, Result, Error};
-use diesel::prelude::*;
+use actix_web::{get, post, web, HttpResponse, Result, Error
+};
+use diesel::{prelude::*, select};
 
 use crate::models::{Recipe, NewRecipe, Ingredient, NewIngredient, Unit, NewUnit, Label, NewLabel, Qty, NewQty};
 use crate::libs::{find_booz};
@@ -125,6 +127,8 @@ fn post_recipe(conn: &PgConnection, info: web::Json<Info>)->Result<Recipe, DbErr
     use crate::schema::qtys::dsl::*;
     use crate::schema::units::dsl::*;
 
+
+
     //recipe
     let new_recipe = NewRecipe {
         title: &info.title.as_str(),
@@ -133,7 +137,8 @@ fn post_recipe(conn: &PgConnection, info: web::Json<Info>)->Result<Recipe, DbErr
         directions: &info.directions.as_str(),
     };
 
-    let this_recipe: Recipe = diesel::insert_into(recipes)
+
+    let this_recipe: Recipe =  diesel::insert_into(recipes)
         .values(&new_recipe)
         .get_result(conn)
         .expect("error saving new recipe");
